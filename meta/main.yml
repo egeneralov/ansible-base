@@ -7,8 +7,10 @@ galaxy_info:
   platforms:
   - name: Debian
     versions:
-    - 9
-    - 8
+    - sid
+    - buster
+    - stretch
+    - jessie
   - name: Ubuntu
     versions:
     - all
