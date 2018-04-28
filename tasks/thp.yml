@@ -1,0 +1,27 @@
+---
+
+- name: Ensure rc.local exist
+  file:
+    path: /etc/rc.local
+    state: touch
+    owner: root
+    group: root
+    mode: -rwxr-xr-x
+
+- name: Disable Transparent Huge Pages at boot
+  lineinfile:
+    dest: /etc/rc.local
+    line: "if [ -d /sys/kernel/mm/transparent_hugepage ]; then echo 'never' > /sys/kernel/mm/transparent_hugepage/enabled ; echo 'never' > /sys/kernel/mm/transparent_hugepage/defrag ; fi"
+  register: transparent_hugepage
+- name: Disable disabled rc.local
+  lineinfile:
+    dest: /etc/rc.local
+    line: 'exit 0'
+    state: absent
+  when: transparent_hugepage|changed
+- name: Disable Transparent Huge Pages at run time 1/2
+  command: echo never > /sys/kernel/mm/transparent_hugepage/defrag
+#   when: transparent_hugepage|changed
+- name: Disable Transparent Huge Pages at run time 2/2
+  command: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+#   when: transparent_hugepage|changed
