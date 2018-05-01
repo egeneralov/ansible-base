@@ -10,11 +10,11 @@
     dest: /etc/bash.bashrc
 
 - name: Update the entire system
- apt:
-   state: latest
-   upgrade: yes
-   autoremove: yes
-   update_cache: yes
+  apt:
+    state: latest
+    upgrade: yes
+    autoremove: yes
+    update_cache: yes
 
 - name: Install platform-specified sysadmin tools (Debian-based systems)
   apt:
