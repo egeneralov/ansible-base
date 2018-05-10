@@ -20,11 +20,11 @@
         - {'line': 'PubkeyAuthentication yes', 'regexp': 'PubkeyAuthentication'}
         - {'line': 'ListenAddress 0.0.0.0', 'regexp': 'ListenAddress'}
         - {'line': 'SyslogFacility AUTH', 'regexp': 'SyslogFacility'}
-        - {'line': 'LogLevel DEBUG', 'regexp': 'LogLevel'}
+        - {'line': 'LogLevel INFO', 'regexp': 'LogLevel'}
         - {'line': 'LoginGraceTime 10s', 'regexp': 'LoginGraceTime'}
         - {'line': 'PermitRootLogin without-password', 'regexp': 'PermitRootLogin'}
         - {'line': 'MaxAuthTries 2', 'regexp': 'MaxAuthTries'}
-        - {'line': 'PasswordAuthentication yes', 'regexp': 'PasswordAuthentication'}
+        - {'line': 'PasswordAuthentication no', 'regexp': 'PasswordAuthentication'}
         - {'line': 'PermitEmptyPasswords no', 'regexp': 'PermitEmptyPasswords'}
         - {'line': 'ChallengeResponseAuthentication yes', 'regexp': 'ChallengeResponseAuthentication'}
         - {'line': 'GatewayPorts yes', 'regexp': 'GatewayPorts'}
@@ -34,16 +34,6 @@
         - {'line': 'AuthorizedKeysFile .ssh/authorized_keys', 'regexp': 'AuthorizedKeysFile'}
         - {'line': 'PrintMotd no', 'regexp': 'PrintMotd'}
       register: sshd_config
-    - name: Allow ssh port
-      register: iptables_sshd
-      iptables:
-        chain: INPUT
-        ctstate: NEW,ESTABLISHED
-        source: 0.0.0.0/0
-        protocol: tcp
-        jump: ACCEPT
-        destination_port: "{{ ssh_port | default(49384) }}"
-      when: ssh_iptables | default(False)
     - name: Restart sshd
       when: sshd_config.changed
       service:
