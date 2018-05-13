@@ -18,7 +18,7 @@
     dest: /etc/rc.local
     line: 'exit 0'
     state: absent
-  when: transparent_hugepage|changed
+  when: transparent_hugepage is changed
 - name: Disable Transparent Huge Pages at run time 1/2
   command: echo never > /sys/kernel/mm/transparent_hugepage/defrag
 #   when: transparent_hugepage|changed
